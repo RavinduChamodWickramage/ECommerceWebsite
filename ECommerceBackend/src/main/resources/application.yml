@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ecommerce_website
+    username: root
+    password: 19982001
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+
+app:
+  client:
+    url: http://localhost:4200
+
+jwt:
+  secret: e4b85+TGyDUyay70c3aaE7zbGaVV4iChxSgVxjSiHTG0CGV5wnskGjn813rpq00Ty0OsQXnAGjPLjITnuv50oQ==
