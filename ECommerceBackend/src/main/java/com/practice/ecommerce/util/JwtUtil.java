@@ -19,7 +19,7 @@ public class JwtUtil {
     private String SECRET;
 
 
-    private static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 30;
+    private static final long JWT_TOKEN_VALIDITY = 1000 * 60 * 60 * 24;
 
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
