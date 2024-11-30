@@ -3,22 +3,42 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { AdminComponent } from './admin/admin.component';
 import { CustomerComponent } from './customer/customer.component';
+import { PostCategoryComponent } from './admin/components/post-category/post-category.component';
+import { PostProductComponent } from './admin/components/post-product/post-product.component';
+import { AdminDashboardComponent } from './admin/components/admin-dashboard/admin-dashboard.component';
+import { CustomerDashboardComponent } from './customer/components/customer-dashboard/customer-dashboard.component';
 
 export const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'signup',
-    component: SignupComponent
+    component: SignupComponent,
   },
   {
     path: 'admin',
-    component: AdminComponent
+    component: AdminComponent,
   },
   {
     path: 'customer',
-    component: CustomerComponent
-  }
+    component: CustomerComponent,
+  },
+  {
+    path: 'admin/dashboard',
+    component: AdminDashboardComponent,
+  },
+  {
+    path: 'customer/dashboard',
+    component: CustomerDashboardComponent,
+  },
+  {
+    path: 'admin/category',
+    component: PostCategoryComponent,
+  },
+  {
+    path: 'admin/product',
+    component: PostProductComponent,
+  },
 ];

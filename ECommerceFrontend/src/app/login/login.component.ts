@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../service/auth/auth.service';
 import { Router } from '@angular/router';
+import { UserStorageService } from '../service/storage/user-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -52,7 +53,11 @@ export class LoginComponent {
     this.authService.login(username, password).subscribe(
       (success) => {
         if (success) {
-          this.router.navigate(['/']);
+          if (UserStorageService.isAdminLoggedIn()) {
+            this.router.navigate(['/admin/dashboard']);
+          } else if (UserStorageService.isCustomerLoggedIn()) {
+            this.router.navigate(['/customer/dashboard']);
+          }
         } else {
           this.alertMessage = 'Login failed. Invalid credentials.';
           this.alertType = 'danger';
