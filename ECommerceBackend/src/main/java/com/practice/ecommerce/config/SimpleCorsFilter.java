@@ -10,8 +10,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 @NoArgsConstructor
@@ -27,6 +25,7 @@ public class SimpleCorsFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
 
         String originHeader = request.getHeader("Origin");
+
 
         if (clientAppUrl.equals(originHeader)) {
             response.setHeader("Access-Control-Allow-Origin", clientAppUrl);

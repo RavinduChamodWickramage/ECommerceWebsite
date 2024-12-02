@@ -2,6 +2,8 @@ package com.practice.ecommerce.controller.customer;
 
 import com.practice.ecommerce.dto.AddProductInCartDto;
 import com.practice.ecommerce.dto.OrderDto;
+import com.practice.ecommerce.exception.ForbiddenException;
+import com.practice.ecommerce.exception.ValidationException;
 import com.practice.ecommerce.service.customer.cart.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,5 +26,18 @@ public class CartController {
     public ResponseEntity<?> getCartByUserId(@PathVariable Long userId) {
         OrderDto orderDto = cartService.getCartByUserId(userId);
         return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+    }
+
+    @GetMapping("/coupon/{userId}/{code}")
+    public ResponseEntity<?> applyCoupon(@PathVariable Long userId, @PathVariable String code) {
+        try {
+            OrderDto orderDto = cartService.applyCoupon(userId, code);
+            return ResponseEntity.ok(orderDto);
+        } catch (ValidationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (ForbiddenException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+
     }
 }
