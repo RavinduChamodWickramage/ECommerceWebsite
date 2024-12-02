@@ -7,6 +7,7 @@ import { PostCategoryComponent } from './admin/components/post-category/post-cat
 import { PostProductComponent } from './admin/components/post-product/post-product.component';
 import { AdminDashboardComponent } from './admin/components/admin-dashboard/admin-dashboard.component';
 import { CustomerDashboardComponent } from './customer/components/customer-dashboard/customer-dashboard.component';
+import { CartComponent } from './customer/components/cart/cart.component';
 
 export const routes: Routes = [
   {
@@ -40,5 +41,9 @@ export const routes: Routes = [
   {
     path: 'admin/product',
     component: PostProductComponent,
+  },
+  {
+    path: 'customer/cart',
+    component: CartComponent,
   },
 ];

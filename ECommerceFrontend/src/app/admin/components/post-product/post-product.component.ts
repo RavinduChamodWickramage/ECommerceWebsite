@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './post-product.component.html',
-  styleUrl: './post-product.component.scss',
+  styleUrls: ['./post-product.component.scss'],
 })
 export class PostProductComponent {
   productForm: FormGroup;
@@ -56,10 +56,40 @@ export class PostProductComponent {
 
       const reader = new FileReader();
       reader.onload = () => {
-        this.previewImage = reader.result as string;
+        this.resizeImage(reader.result as string, 300, 300);
       };
       reader.readAsDataURL(this.selectedImage);
     }
+  }
+
+  resizeImage(base64Img: string, maxWidth: number, maxHeight: number): void {
+    const img = new Image();
+    img.src = base64Img;
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      let width = img.width;
+      let height = img.height;
+
+      if (width > maxWidth || height > maxHeight) {
+        const aspectRatio = width / height;
+        if (width > height) {
+          width = maxWidth;
+          height = maxWidth / aspectRatio;
+        } else {
+          height = maxHeight;
+          width = maxHeight * aspectRatio;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx?.drawImage(img, 0, 0, width, height);
+
+      this.previewImage = canvas.toDataURL('image/jpeg');
+    };
   }
 
   onSubmit(): void {
