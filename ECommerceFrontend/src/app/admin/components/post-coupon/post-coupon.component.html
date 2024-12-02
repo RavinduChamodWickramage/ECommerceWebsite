@@ -1,0 +1,110 @@
+<div class="container pt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div
+        *ngIf="alertMessage"
+        class="alert alert-{{ alertType }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ alertMessage }}
+        <button
+          type="button"
+          class="btn-close"
+          (click)="resetAlert()"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+          <h4>Post Coupon</h4>
+        </div>
+
+        <div class="card-body">
+          <form [formGroup]="couponForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="name">Coupon Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name"
+                id="name"
+                placeholder="Enter Coupon Name"
+                required
+              />
+              <small
+                class="text-danger"
+                *ngIf="formControls['name'].touched && formControls['name'].errors?.['required']"
+              >
+                Coupon name is required.
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label for="code">Coupon Code:</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="code"
+                id="code"
+                placeholder="Enter Coupon Code"
+                required
+              />
+              <small
+                class="text-danger"
+                *ngIf="formControls['code'].touched && formControls['code'].errors?.['required']"
+              >
+                Coupon code is required.
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label for="discount">Discount:</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="discount"
+                id="discount"
+                placeholder="Enter Discount"
+                required
+              />
+              <small
+                class="text-danger"
+                *ngIf="formControls['discount'].touched && formControls['discount'].errors?.['required']"
+              >
+                Discount is required.
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label for="expirationDate">Expiration Date:</label>
+              <input
+                type="date"
+                class="form-control"
+                formControlName="expirationDate"
+                id="expirationDate"
+                required
+              />
+              <small
+                class="text-danger"
+                *ngIf="formControls['expirationDate'].touched && formControls['expirationDate'].errors?.['required']"
+              >
+                Expiration date is required.
+              </small>
+            </div>
+
+            <div class="pt-2">
+              <button
+                type="submit"
+                class="btn btn-primary w-100 py-2"
+                [disabled]="couponForm.invalid"
+              >
+                Add Coupon
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

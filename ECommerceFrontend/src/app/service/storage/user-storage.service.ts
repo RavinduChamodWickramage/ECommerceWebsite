@@ -19,8 +19,20 @@ export class UserStorageService {
     window.localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
-  static getToken(): string {
-    return localStorage.getItem(TOKEN_KEY);
+  static getToken(): string | null {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (this.isTokenExpired(token)) {
+      this.signOut();
+      return null;
+    }
+    return token;
+  }
+
+  private static isTokenExpired(token: string | null): boolean {
+    if (!token) return true;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const currentTime = Math.floor(Date.now() / 1000);
+    return payload.exp < currentTime;
   }
 
   static getUser(): any {

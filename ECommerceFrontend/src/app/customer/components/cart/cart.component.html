@@ -1,25 +1,35 @@
 <div class="container my-5">
   <h2 class="text-center mb-4">Your Shopping Cart</h2>
 
-  <!-- Loading Spinner -->
+  <div
+    *ngIf="alertMessage"
+    class="alert alert-{{ alertType }} alert-dismissible fade show"
+    role="alert"
+  >
+    {{ alertMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="resetAlert()"
+      aria-label="Close"
+    ></button>
+  </div>
+
   <div *ngIf="isLoading" class="text-center">
     <p>Loading your cart...</p>
     <div class="spinner-border" role="status"></div>
   </div>
 
-  <!-- Empty Cart Message -->
   <div
-    *ngIf="cartItems.length === 0 && !isLoading"
+    *ngIf="cartItems && cartItems.length === 0 && !isLoading"
     class="alert alert-info text-center"
   >
     <p>Your cart is empty. Start adding items!</p>
   </div>
 
-  <!-- Cart Items -->
   <div *ngIf="cartItems.length > 0" class="row">
     <div *ngFor="let item of cartItems" class="col-md-4 mb-4">
       <div class="card shadow-sm">
-        <!-- Display product image -->
         <img
           [src]="item.image"
           class="card-img-top"
@@ -57,13 +67,50 @@
       </div>
     </div>
 
-    <!-- Total and Action Buttons -->
-    <div class="col-12 mt-4">
-      <div class="d-flex justify-content-between">
-        <h3>Total: ${{ calculateTotalPrice() }}</h3>
-        <button class="btn btn-danger" (click)="clearCart()">Clear Cart</button>
-        <button class="btn btn-success">Proceed to Checkout</button>
+    <div class="row mt-4">
+      <div class="col-md-8 offset-md-2">
+        <form [formGroup]="couponForm">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter Coupon Code"
+              formControlName="code"
+              [ngClass]="{
+                'is-invalid': couponForm.invalid && couponForm.touched
+              }"
+            />
+            <button class="btn btn-primary" (click)="applyCoupon()">
+              Apply Coupon
+            </button>
+          </div>
+
+          <div
+            *ngIf="couponForm.invalid && couponForm.touched"
+            class="invalid-feedback"
+          >
+            Please enter a valid coupon code.
+          </div>
+        </form>
       </div>
     </div>
+
+    <div class="col-12 mt-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h4>Total Amount: ${{ totalAmount }}</h4>
+          <h5>Discount: {{ discountRate }}%</h5>
+          <h5>Discount Amount: ${{ discountAmount }}</h5>
+          <h3>Net Total: ${{ netTotal }}</h3>
+        </div>
+        <div>
+          <button class="btn btn-danger" (click)="clearCart()">
+            Clear Cart
+          </button>
+          <button class="btn btn-success">Proceed to Checkout</button>
+        </div>
+      </div>
+    </div>
+    
   </div>
 </div>

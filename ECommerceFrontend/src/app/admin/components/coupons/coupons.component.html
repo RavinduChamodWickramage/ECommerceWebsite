@@ -1,0 +1,44 @@
+<div class="container pt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div
+        *ngIf="alertMessage"
+        class="alert alert-{{ alertType }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ alertMessage }}
+        <button
+          type="button"
+          class="btn-close"
+          (click)="resetAlert()"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div *ngIf="coupons.length > 0; else noCoupons">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Code</th>
+              <th>Discount</th>
+              <th>Expiration Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let coupon of coupons">
+              <td>{{ coupon.name }}</td>
+              <td>{{ coupon.code }}</td>
+              <td>{{ coupon.discount }}%</td>
+              <td>{{ coupon.expirationDate | date }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #noCoupons>
+        <p>No coupons available at the moment.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

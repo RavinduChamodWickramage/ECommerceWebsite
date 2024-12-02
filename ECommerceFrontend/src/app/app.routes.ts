@@ -8,6 +8,8 @@ import { PostProductComponent } from './admin/components/post-product/post-produ
 import { AdminDashboardComponent } from './admin/components/admin-dashboard/admin-dashboard.component';
 import { CustomerDashboardComponent } from './customer/components/customer-dashboard/customer-dashboard.component';
 import { CartComponent } from './customer/components/cart/cart.component';
+import { PostCouponComponent } from './admin/components/post-coupon/post-coupon.component';
+import { CouponsComponent } from './admin/components/coupons/coupons.component';
 
 export const routes: Routes = [
   {
@@ -45,5 +47,13 @@ export const routes: Routes = [
   {
     path: 'customer/cart',
     component: CartComponent,
+  },
+  {
+    path: 'admin/post-coupon',
+    component: PostCouponComponent,
+  },
+  {
+    path: 'admin/coupons',
+    component: CouponsComponent,
   },
 ];

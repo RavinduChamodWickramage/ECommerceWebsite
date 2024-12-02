@@ -41,24 +41,12 @@ export class CustomerService {
     });
   }
 
-  // removeItemFromCart(productId: number): Observable<any> {
-  //   return this.http.delete(BASIC_URL + `api/customer/cart/${productId}`, {
-  //     headers: this.createAuthorizationHeader(),
-  //   });
-  // }
-
-  // clearCart(): Observable<any> {
-  //   const userId = UserStorageService.getUserId();
-  //   return this.http.delete(BASIC_URL + `api/customer/cart/clear/${userId}`, {
-  //     headers: this.createAuthorizationHeader(),
-  //   });
-  // }
-
-  // updateCartItem(item: any): Observable<any> {
-  //   return this.http.put(BASIC_URL + `api/customer/cart`, item, {
-  //     headers: this.createAuthorizationHeader(),
-  //   });
-  // }
+  applyCoupon(code: any): Observable<any> {
+    const userId = UserStorageService.getUserId();
+    return this.http.get(BASIC_URL + `api/customer/coupon/${userId}/${code}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
 
   private createAuthorizationHeader(): HttpHeaders {
     return new HttpHeaders().set(
