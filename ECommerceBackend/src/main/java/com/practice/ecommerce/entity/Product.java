@@ -1,11 +1,14 @@
 package com.practice.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.practice.ecommerce.dto.ProductDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -30,8 +33,12 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
+    @JsonIgnore //
     private Category category;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @JsonManagedReference //
+    private List<CartItems> cartItems;
 
     public ProductDto getDto() {
         ProductDto productDto = new ProductDto();
@@ -41,6 +48,7 @@ public class Product {
         productDto.setDescription(description);
         productDto.setByteImg(img);
         productDto.setCategoryId(category.getId());
+        productDto.setCategoryName(category.getName());
         return productDto;
     }
 

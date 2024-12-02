@@ -14,6 +14,9 @@ spring:
       ddl-auto: update
       show-sql: true
 
+server:
+  max-http-header-size: 32KB
+
 app:
   client:
     url: http://localhost:4200

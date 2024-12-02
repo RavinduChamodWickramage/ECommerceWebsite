@@ -1,5 +1,6 @@
 package com.practice.ecommerce.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,5 +19,8 @@ public class ProductDto {
 
     private Long categoryId;
 
+    private String categoryName;
+
+    @JsonIgnore
     private MultipartFile img;
 }

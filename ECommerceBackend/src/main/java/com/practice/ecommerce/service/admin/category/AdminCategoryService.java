@@ -5,7 +5,7 @@ import com.practice.ecommerce.entity.Category;
 
 import java.util.List;
 
-public interface CategoryService {
+public interface AdminCategoryService {
 
     Category createCategory(CategoryDto categoryDto);
 
