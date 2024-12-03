@@ -154,6 +154,51 @@ public class CartServiceImpl implements CartService {
         return activeOrder.getOrderDto();
     }
 
+    @Override
+    public OrderDto increaseProductQuantity(AddProductInCartDto addProductInCartDto) {
+        if (addProductInCartDto.getProductId() == null || addProductInCartDto.getUserId() == null) {
+            throw new ValidationException("Invalid productId or userId.");
+        }
+
+        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.PENDING);
+        if (activeOrder == null) {
+            throw new ValidationException("No active order found for user.");
+        }
+
+        Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
+        if (optionalProduct.isEmpty()) {
+            throw new ValidationException("Product not found.");
+        }
+
+        Product product = optionalProduct.get();
+
+        Optional<CartItems> optionalCartItems = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
+                addProductInCartDto.getProductId(), activeOrder.getId(), addProductInCartDto.getUserId());
+        if (optionalCartItems.isEmpty()) {
+            throw new ValidationException("Cart item not found for this product. Add it to the cart first.");
+        }
+
+        CartItems cartItem = optionalCartItems.get();
+        cartItem.setQuantity(cartItem.getQuantity() + 1);
+
+        activeOrder.setAmount((long) (activeOrder.getAmount() + product.getPrice()));
+        activeOrder.setTotalAmount((long) (activeOrder.getTotalAmount() + product.getPrice()));
+
+        if (activeOrder.getCoupon() != null) {
+            double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount());
+            double netAmount = activeOrder.getTotalAmount() - discountAmount;
+
+            activeOrder.setDiscount((long) discountAmount);
+            activeOrder.setAmount((long) netAmount);
+        }
+        
+        cartItemsRepository.save(cartItem);
+        orderRepository.save(activeOrder);
+
+        return activeOrder.getOrderDto();
+    }
+
+
     private boolean couponIsExpired(Coupon coupon) {
         Date currentDate = new Date();
         Date expirationDate = coupon.getExpirationDate();

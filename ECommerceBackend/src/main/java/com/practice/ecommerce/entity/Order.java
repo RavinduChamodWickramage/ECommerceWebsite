@@ -1,6 +1,7 @@
 package com.practice.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.practice.ecommerce.dto.CartItemsDto;
 import com.practice.ecommerce.dto.OrderDto;
 import com.practice.ecommerce.enums.OrderStatus;
 import jakarta.persistence.*;
@@ -63,6 +64,13 @@ public class Order {
             orderDto.setCouponName(coupon.getName());
             orderDto.setDiscountRate(coupon.getDiscount());
         }
+
+        List<CartItemsDto> cartItemsDtoList = new ArrayList<>(); //
+        for (CartItems cartItem : cartItems) {
+            cartItemsDtoList.add(cartItem.getCartDto());
+        }
+
+        orderDto.setCartItems(cartItemsDtoList);  //
 
         return orderDto;
 
