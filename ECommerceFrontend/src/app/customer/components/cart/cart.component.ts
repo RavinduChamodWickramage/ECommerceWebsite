@@ -125,12 +125,25 @@ export class CartComponent implements OnInit {
   }
 
   increaseQuantity(productId: number): void {
-    const item = this.cartItems.find((i) => i.id === productId);
-    if (item) {
-      item.quantity += 1;
-      this.updateCartItem(item);
-      this.calculateTotals();
-    }
+    this.customerService.increaseProductQuantity(productId).subscribe({
+      next: (response) => {
+        this.alertMessage = 'Product quantity increased successfully.';
+        this.alertType = 'success';
+        this.getCart();
+      },
+      error: (error) => {
+        if (error.status === 400) {
+          this.alertMessage = 'Invalid request. Unable to increase quantity.';
+        } else if (error.status === 404) {
+          this.alertMessage = 'Product or cart not found.';
+        } else if (error.status === 500) {
+          this.alertMessage = 'Server error while updating quantity.';
+        } else {
+          this.alertMessage = 'Unexpected error occurred. Please try again.';
+        }
+        this.alertType = 'danger';
+      },
+    });
   }
 
   decreaseQuantity(productId: number): void {
