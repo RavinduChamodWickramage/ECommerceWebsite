@@ -46,5 +46,19 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cartService.increaseProductQuantity(addProductInCartDto));
     }
 
+    @PostMapping("/decrease")
+    public ResponseEntity<OrderDto> decreaseProductQuantity(@RequestBody AddProductInCartDto addProductInCartDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(cartService.decreaseProductQuantity(addProductInCartDto));
+    }
+
+    @DeleteMapping("/remove/{productId}/{userId}")
+    public ResponseEntity<OrderDto> removeProductFromCart(@PathVariable Long productId, @PathVariable Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(cartService.removeProductFromCart(productId, userId));
+    }
+
+    @DeleteMapping("/clear/{userId}")
+    public ResponseEntity<OrderDto> clearCart(@PathVariable Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(cartService.clearCart(userId));
+    }
 
 }

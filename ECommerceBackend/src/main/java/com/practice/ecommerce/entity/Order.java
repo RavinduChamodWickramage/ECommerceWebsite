@@ -65,13 +65,6 @@ public class Order {
             orderDto.setDiscountRate(coupon.getDiscount());
         }
 
-        List<CartItemsDto> cartItemsDtoList = new ArrayList<>(); //
-        for (CartItems cartItem : cartItems) {
-            cartItemsDtoList.add(cartItem.getCartDto());
-        }
-
-        orderDto.setCartItems(cartItemsDtoList);  //
-
         return orderDto;
 
     }

@@ -59,8 +59,6 @@ public class CartServiceImpl implements CartService {
             }
 
             orderRepository.save(activeOrder);
-
-            System.out.println("Created a new active order for userId: " + addProductInCartDto.getUserId());
         }
 
         Optional<CartItems> optionalCartItems =
@@ -191,12 +189,109 @@ public class CartServiceImpl implements CartService {
             activeOrder.setDiscount((long) discountAmount);
             activeOrder.setAmount((long) netAmount);
         }
-        
+
         cartItemsRepository.save(cartItem);
         orderRepository.save(activeOrder);
 
         return activeOrder.getOrderDto();
     }
+
+    @Override
+    public OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto) {
+        if (addProductInCartDto.getProductId() == null || addProductInCartDto.getUserId() == null) {
+            throw new ValidationException("Invalid productId or userId.");
+        }
+
+        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.PENDING);
+        if (activeOrder == null) {
+            throw new ValidationException("No active order found for user.");
+        }
+
+        Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
+        if (optionalProduct.isEmpty()) {
+            throw new ValidationException("Product not found.");
+        }
+
+        Product product = optionalProduct.get();
+
+        Optional<CartItems> optionalCartItems = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
+                addProductInCartDto.getProductId(), activeOrder.getId(), addProductInCartDto.getUserId());
+
+        if (optionalCartItems.isEmpty()) {
+            throw new ValidationException("Cart item not found for this product. Add it to the cart first.");
+        }
+
+        CartItems cartItem = optionalCartItems.get();
+        cartItem.setQuantity(cartItem.getQuantity() - 1);
+
+        activeOrder.setAmount((long) (activeOrder.getAmount() - product.getPrice()));
+        activeOrder.setTotalAmount((long) (activeOrder.getTotalAmount() - product.getPrice()));
+
+        if (activeOrder.getCoupon() != null) {
+            double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount());
+            double netAmount = activeOrder.getTotalAmount() - discountAmount;
+
+            activeOrder.setDiscount((long) discountAmount);
+            activeOrder.setAmount((long) netAmount);
+        }
+
+        cartItemsRepository.save(cartItem);
+        orderRepository.save(activeOrder);
+        return activeOrder.getOrderDto();
+    }
+
+    @Override
+    public OrderDto removeProductFromCart(Long productId, Long userId) {
+        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
+        if (activeOrder == null) {
+            throw new ValidationException("No active order found for user.");
+        }
+
+        Optional<CartItems> optionalCartItems = cartItemsRepository.findByProductIdAndOrderIdAndUserId(productId, activeOrder.getId(), userId);
+        if (optionalCartItems.isEmpty()) {
+            throw new ValidationException("Product not found in the cart.");
+        }
+
+        CartItems cartItem = optionalCartItems.get();
+
+        activeOrder.setAmount(activeOrder.getAmount() - cartItem.getPrice());
+        activeOrder.setTotalAmount(activeOrder.getTotalAmount() - cartItem.getPrice());
+
+        if (activeOrder.getCoupon() != null) {
+            double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount());
+            double netAmount = activeOrder.getTotalAmount() - discountAmount;
+
+            activeOrder.setDiscount((long) discountAmount);
+            activeOrder.setAmount((long) netAmount);
+        }
+
+        cartItemsRepository.delete(cartItem);
+        orderRepository.save(activeOrder);
+
+        return activeOrder.getOrderDto();
+    }
+
+    @Override
+    public OrderDto clearCart(Long userId) {
+        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
+        if (activeOrder == null) {
+            throw new ValidationException("No active order found for user.");
+        }
+
+        List<CartItems> cartItems = cartItemsRepository.findByOrderId(activeOrder.getId());
+
+        for (CartItems cartItem : cartItems) {
+            Optional<CartItems> itemOptional = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
+                    cartItem.getProduct().getId(), activeOrder.getId(), userId);
+
+            itemOptional.ifPresent(cartItemsRepository::delete);
+        }
+
+        orderRepository.delete(activeOrder);
+
+        return activeOrder.getOrderDto();
+    }
+
 
 
     private boolean couponIsExpired(Coupon coupon) {
