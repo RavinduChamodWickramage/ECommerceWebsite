@@ -59,6 +59,34 @@ export class CustomerService {
     });
   }
 
+  decreaseProductQuantity(productId: any): Observable<any> {
+    const cartDto = {
+      productId: productId,
+      userId: UserStorageService.getUserId(),
+    };
+    console.log('Request Body: ', cartDto);
+    return this.http.post(BASIC_URL + `api/customer/decrease`, cartDto, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  removeProduct(productId: any): Observable<any> {
+    const userId = UserStorageService.getUserId();
+    return this.http.delete(
+      BASIC_URL + `api/customer/remove/${productId}/${userId}`,
+      {
+        headers: this.createAuthorizationHeader(),
+      }
+    );
+  }
+
+  clearCart(): Observable<any> {
+    const userId = UserStorageService.getUserId();
+    return this.http.delete(BASIC_URL + `api/customer/clear/${userId}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
   private createAuthorizationHeader(): HttpHeaders {
     return new HttpHeaders().set(
       'Authorization',

@@ -149,18 +149,64 @@ export class CartComponent implements OnInit {
   decreaseQuantity(productId: number): void {
     const item = this.cartItems.find((i) => i.id === productId);
     if (item && item.quantity > 1) {
-      item.quantity -= 1;
-      this.updateCartItem(item);
-      this.calculateTotals();
+      this.customerService.decreaseProductQuantity(productId).subscribe({
+        next: (response) => {
+          this.alertMessage = 'Product quantity decreased successfully.';
+          this.alertType = 'success';
+          this.getCart();
+        },
+        error: (error) => {
+          if (error.status === 400) {
+            this.alertMessage = 'Invalid request. Unable to decrease quantity.';
+          } else if (error.status === 404) {
+            this.alertMessage = 'Product or cart not found.';
+          } else if (error.status === 500) {
+            this.alertMessage = 'Server error while updating quantity.';
+          } else {
+            this.alertMessage = 'Unexpected error occurred. Please try again.';
+          }
+          this.alertType = 'danger';
+        },
+      });
     }
   }
 
-  removeItem(productId: number): void {
-    alert('The remove item function is no longer available.');
+  removeProduct(productId: number): void {
+    this.customerService.removeProduct(productId).subscribe({
+      next: (response) => {
+        this.alertMessage = 'Product removed from the cart successfully.';
+        this.alertType = 'success';
+        this.getCart();
+      },
+      error: (error) => {
+        if (error.status === 404) {
+          this.alertMessage = 'Product not found in the cart.';
+        } else if (error.status === 500) {
+          this.alertMessage = 'Server error while removing the product.';
+        } else {
+          this.alertMessage = 'Unexpected error occurred. Please try again.';
+        }
+        this.alertType = 'danger';
+      },
+    });
   }
 
   clearCart(): void {
-    alert('The clear cart function is no longer available.');
+    this.customerService.clearCart().subscribe({
+      next: (response) => {
+        this.cartItems = [];
+        this.alertMessage = 'Your cart has been cleared.';
+        this.alertType = 'success';
+      },
+      error: (error) => {
+        if (error.status === 500) {
+          this.alertMessage = 'Server error while clearing the cart.';
+        } else {
+          this.alertMessage = 'Unexpected error occurred. Please try again.';
+        }
+        this.alertType = 'danger';
+      },
+    });
   }
 
   calculateTotals(): void {
