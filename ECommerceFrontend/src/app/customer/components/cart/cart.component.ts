@@ -7,17 +7,17 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { PlaceOrderComponent } from '../place-order/place-order.component';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, PlaceOrderComponent],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
 })
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
-  // order: { totalPrice: number } = { totalPrice: 0 };
   totalAmount: number = 0;
   discountRate: number = 0;
   discountAmount: number = 0;
@@ -29,6 +29,8 @@ export class CartComponent implements OnInit {
 
   couponForm!: FormGroup;
 
+  showPlaceOrder: boolean = false;
+
   constructor(
     private customerService: CustomerService,
     private fb: FormBuilder
@@ -39,6 +41,10 @@ export class CartComponent implements OnInit {
       code: [null, Validators.required],
     });
     this.getCart();
+  }
+
+  togglePlaceOrder(): void {
+    this.showPlaceOrder = !this.showPlaceOrder;
   }
 
   applyCoupon() {

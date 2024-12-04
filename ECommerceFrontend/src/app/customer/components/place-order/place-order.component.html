@@ -1,0 +1,62 @@
+<div class="container my-5">
+  <h2 class="text-center mb-4">Place Your Order</h2>
+
+  <div
+    *ngIf="alertMessage"
+    class="alert alert-{{ alertType }} alert-dismissible fade show"
+    role="alert"
+  >
+    {{ alertMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="resetForm()"
+      aria-label="Close"
+    ></button>
+  </div>
+
+  <form [formGroup]="orderForm" (ngSubmit)="placeOrder()">
+    <!-- Delivery Address -->
+    <div class="mb-3">
+      <label for="address" class="form-label">Delivery Address</label>
+      <textarea
+        id="address"
+        class="form-control"
+        formControlName="address"
+        required
+      ></textarea>
+      <div
+        *ngIf="
+          orderForm.get('address')?.invalid && orderForm.get('address')?.touched
+        "
+        class="text-danger"
+      >
+        Address is required.
+      </div>
+    </div>
+
+    <!-- Optional Description -->
+    <div class="mb-3">
+      <label for="description" class="form-label">Order Description</label>
+      <textarea
+        id="description"
+        class="form-control"
+        formControlName="description"
+      ></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-end">
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="orderForm.invalid"
+      >
+        Submit Order
+      </button>
+      <button type="button" class="btn btn-danger ms-2" (click)="onClose()">
+        Close
+      </button>
+    </div>
+  </form>
+</div>

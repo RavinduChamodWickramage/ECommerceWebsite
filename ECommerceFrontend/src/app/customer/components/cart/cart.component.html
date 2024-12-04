@@ -107,9 +107,16 @@
           <button class="btn btn-danger" (click)="clearCart()">
             Clear Cart
           </button>
-          <button class="btn btn-success">Proceed to Checkout</button>
+          <button class="btn btn-success" (click)="togglePlaceOrder()">
+            Proceed to Checkout
+          </button>
         </div>
       </div>
     </div>
+  </div>
+
+  <div *ngIf="showPlaceOrder" class="modal-backdrop"></div>
+  <div *ngIf="showPlaceOrder" class="modal-content">
+    <app-place-order (close)="togglePlaceOrder()"></app-place-order>
   </div>
 </div>

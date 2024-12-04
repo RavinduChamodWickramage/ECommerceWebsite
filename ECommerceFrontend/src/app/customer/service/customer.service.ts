@@ -80,6 +80,13 @@ export class CustomerService {
     );
   }
 
+  placeOrder(orderDto: any): Observable<any> {
+    orderDto.userId = UserStorageService.getUserId();
+    return this.http.post(BASIC_URL + `api/customer/placeOrder`, orderDto, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
   clearCart(): Observable<any> {
     const userId = UserStorageService.getUserId();
     return this.http.delete(BASIC_URL + `api/customer/clear/${userId}`, {
