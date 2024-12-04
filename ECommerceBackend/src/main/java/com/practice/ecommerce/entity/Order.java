@@ -35,6 +35,8 @@ public class Order {
 
     private UUID trackingId;
 
+    private String orderDescription;
+
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
@@ -59,6 +61,7 @@ public class Order {
         orderDto.setDate(date);
         orderDto.setOrderStatus(orderStatus);
         orderDto.setUserName(user.getName());
+        orderDto.setOrderDescription(orderDescription);
 
         if (coupon != null) {
             orderDto.setCouponName(coupon.getName());

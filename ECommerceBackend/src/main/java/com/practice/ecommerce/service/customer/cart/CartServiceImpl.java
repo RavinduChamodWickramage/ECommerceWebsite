@@ -3,6 +3,7 @@ package com.practice.ecommerce.service.customer.cart;
 import com.practice.ecommerce.dto.AddProductInCartDto;
 import com.practice.ecommerce.dto.CartItemsDto;
 import com.practice.ecommerce.dto.OrderDto;
+import com.practice.ecommerce.dto.PlaceOrderDto;
 import com.practice.ecommerce.entity.*;
 import com.practice.ecommerce.enums.OrderStatus;
 import com.practice.ecommerce.exception.ValidationException;
@@ -13,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -110,8 +108,22 @@ public class CartServiceImpl implements CartService {
     @Override
     public OrderDto getCartByUserId(Long userId) {
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
+
+        if (activeOrder == null) {
+            activeOrder = new Order();
+            User user = userRepository.findById(userId).orElseThrow(() -> new ValidationException("User not found."));
+            activeOrder.setUser(user);
+            activeOrder.setOrderStatus(OrderStatus.PENDING);
+            activeOrder.setTotalAmount(0L);
+            activeOrder.setAmount(0L);
+            activeOrder.setCartItems(new ArrayList<>());
+
+            orderRepository.save(activeOrder);
+        }
+
         List<CartItemsDto> cartItemsDtoList =
-                    activeOrder.getCartItems().stream().map(CartItems::getCartDto).collect(Collectors.toList());
+                activeOrder.getCartItems().stream().map(CartItems::getCartDto).collect(Collectors.toList());
+
         OrderDto orderDto = new OrderDto();
         orderDto.setAmount(activeOrder.getAmount());
         orderDto.setId(activeOrder.getId());
@@ -153,6 +165,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public OrderDto increaseProductQuantity(AddProductInCartDto addProductInCartDto) {
         if (addProductInCartDto.getProductId() == null || addProductInCartDto.getUserId() == null) {
             throw new ValidationException("Invalid productId or userId.");
@@ -197,6 +210,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto) {
         if (addProductInCartDto.getProductId() == null || addProductInCartDto.getUserId() == null) {
             throw new ValidationException("Invalid productId or userId.");
@@ -224,6 +238,10 @@ public class CartServiceImpl implements CartService {
         CartItems cartItem = optionalCartItems.get();
         cartItem.setQuantity(cartItem.getQuantity() - 1);
 
+        if (cartItem.getQuantity() == 0) {
+            cartItemsRepository.delete(cartItem);
+        }
+
         activeOrder.setAmount((long) (activeOrder.getAmount() - product.getPrice()));
         activeOrder.setTotalAmount((long) (activeOrder.getTotalAmount() - product.getPrice()));
 
@@ -235,12 +253,12 @@ public class CartServiceImpl implements CartService {
             activeOrder.setAmount((long) netAmount);
         }
 
-        cartItemsRepository.save(cartItem);
         orderRepository.save(activeOrder);
         return activeOrder.getOrderDto();
     }
 
     @Override
+    @Transactional
     public OrderDto removeProductFromCart(Long productId, Long userId) {
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
         if (activeOrder == null) {
@@ -258,7 +276,7 @@ public class CartServiceImpl implements CartService {
         activeOrder.setTotalAmount(activeOrder.getTotalAmount() - cartItem.getPrice());
 
         if (activeOrder.getCoupon() != null) {
-            double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount());
+            double discountAmount = (activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount();
             double netAmount = activeOrder.getTotalAmount() - discountAmount;
 
             activeOrder.setDiscount((long) discountAmount);
@@ -266,12 +284,20 @@ public class CartServiceImpl implements CartService {
         }
 
         cartItemsRepository.delete(cartItem);
-        orderRepository.save(activeOrder);
+
+        if (activeOrder.getCartItems().isEmpty()) {
+            orderRepository.delete(activeOrder);
+        } else {
+            orderRepository.save(activeOrder);
+        }
 
         return activeOrder.getOrderDto();
     }
 
+
+
     @Override
+    @Transactional
     public OrderDto clearCart(Long userId) {
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(userId, OrderStatus.PENDING);
         if (activeOrder == null) {
@@ -280,19 +306,49 @@ public class CartServiceImpl implements CartService {
 
         List<CartItems> cartItems = cartItemsRepository.findByOrderId(activeOrder.getId());
 
-        for (CartItems cartItem : cartItems) {
-            Optional<CartItems> itemOptional = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
-                    cartItem.getProduct().getId(), activeOrder.getId(), userId);
-
-            itemOptional.ifPresent(cartItemsRepository::delete);
-        }
+        cartItemsRepository.deleteAll(cartItems);
 
         orderRepository.delete(activeOrder);
 
         return activeOrder.getOrderDto();
     }
 
+    @Override
+    @Transactional
+    public OrderDto placeOrder(PlaceOrderDto placeOrderDto) {
+        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(placeOrderDto.getUserId(), OrderStatus.PENDING);
 
+        if (activeOrder == null) {
+            Optional<User> optionalUser = userRepository.findById(placeOrderDto.getUserId());
+
+            if (optionalUser.isPresent()) {
+                activeOrder = new Order();
+                activeOrder.setUser(optionalUser.get());
+                activeOrder.setOrderStatus(OrderStatus.PENDING);
+                activeOrder.setTrackingId(UUID.randomUUID());
+            } else {
+                return null;
+            }
+        }
+
+        activeOrder.setOrderDescription(placeOrderDto.getOrderDescription());
+        activeOrder.setAddress(placeOrderDto.getAddress());
+        activeOrder.setDate(new Date());
+        activeOrder.setOrderStatus(OrderStatus.PLACED);
+        activeOrder.setTrackingId(UUID.randomUUID());
+
+        orderRepository.save(activeOrder);
+
+        return activeOrder.getOrderDto();
+    }
+
+
+
+    @Override
+    public List<OrderDto> getMyPlacedOrders(Long userId) {
+        return orderRepository.findByUserIdAndOrderStatusIn(userId,List.of(OrderStatus.PLACED, OrderStatus.SHIPPED,
+                OrderStatus.DELIVERED)).stream().map(Order::getOrderDto).collect(Collectors.toList());
+    }
 
     private boolean couponIsExpired(Coupon coupon) {
         Date currentDate = new Date();

@@ -9,6 +9,8 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Data
+@Table(name = "cart_items",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "user_id", "order_id"}))
 public class CartItems {
 
     @Id
@@ -19,18 +21,18 @@ public class CartItems {
 
     private Long quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference //
     private Product product;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", nullable = false)
     @JsonBackReference //
     private Order order;
