@@ -24,4 +24,6 @@ public class ProductDto {
 
     @JsonIgnore
     private MultipartFile img;
+
+    private Long quantity;
 }
