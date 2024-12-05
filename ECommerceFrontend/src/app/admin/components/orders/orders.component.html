@@ -16,7 +16,7 @@
       <tr *ngFor="let order of orders">
         <td>{{ order.trackingId }}</td>
         <td>{{ order.userName }}</td>
-        <td>{{ order.amount }}</td>
+        <td>{{ order.totalAmount | currency }}</td>
         <td>{{ order.orderDescription }}</td>
         <td>{{ order.address }}</td>
         <td>{{ order.date | date }}</td>

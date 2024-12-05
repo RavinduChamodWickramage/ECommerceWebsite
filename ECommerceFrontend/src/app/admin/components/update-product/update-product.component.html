@@ -1,0 +1,137 @@
+<div class="container pt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div
+        *ngIf="alertMessage"
+        class="alert alert-{{ alertType }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ alertMessage }}
+        <button
+          type="button"
+          class="btn-close"
+          (click)="resetAlert()"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+          <h4>Update Product</h4>
+        </div>
+
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <img
+              *ngIf="previewImage"
+              [src]="'data:image/jpeg;base64,' + previewImage"
+              alt="Image Preview"
+              class="img-thumbnail rounded-circle"
+              style="width: 150px; height: 150px; object-fit: cover"
+            />
+          </div>
+
+          <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="name">Product Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name"
+                id="name"
+                placeholder="Enter Product Name"
+                required
+              />
+              <small
+                class="text-danger"
+                *ngIf="formControls['name'].touched && formControls['name'].errors?.['required']"
+              >
+                Product name is required.
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label for="price">Price:</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="price"
+                id="price"
+                placeholder="Enter Product Price"
+                required
+              />
+              <small
+                class="text-danger"
+                *ngIf="formControls['price'].touched && formControls['price'].errors?.['required']"
+              >
+                Product price is required.
+              </small>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="description">Description:</label>
+              <textarea
+                class="form-control"
+                formControlName="description"
+                id="description"
+                rows="3"
+                placeholder="Enter Product Description"
+                required
+              ></textarea>
+              <small
+                class="text-danger"
+                *ngIf="formControls['description'].touched && formControls['description'].errors?.['required']"
+              >
+                Product description is required.
+              </small>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="img">Image (optional):</label>
+              <input
+                type="file"
+                class="form-control"
+                id="img"
+                (change)="onFileChange($event)"
+              />
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="category">Category:</label>
+              <select
+                class="form-control"
+                formControlName="categoryId"
+                id="category"
+                required
+              >
+                <option value="" disabled>Select a category</option>
+                <option
+                  *ngFor="let category of categories"
+                  [value]="category.id"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
+              <small
+                class="text-danger"
+                *ngIf="formControls['categoryId'].touched && formControls['categoryId'].errors?.['required']"
+              >
+                Product category is required.
+              </small>
+            </div>
+
+            <div class="pt-2">
+              <button
+                type="submit"
+                class="btn btn-primary w-100 py-2"
+                [disabled]="productForm.invalid"
+              >
+                Update Product
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

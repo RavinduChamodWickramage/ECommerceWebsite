@@ -94,7 +94,16 @@ export class CustomerService {
     });
   }
 
+  getOrderByUserId(): Observable<any> {
+    const userId = UserStorageService.getUserId();
+    return this.http.get(BASIC_URL + `api/customer/myOrders/${userId}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
   private createAuthorizationHeader(): HttpHeaders {
+    const token = UserStorageService.getToken();
+    console.log('Authorization Token:', token);
     return new HttpHeaders().set(
       'Authorization',
       'Bearer ' + UserStorageService.getToken()

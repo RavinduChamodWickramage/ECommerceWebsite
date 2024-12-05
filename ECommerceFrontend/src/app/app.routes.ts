@@ -11,6 +11,9 @@ import { CartComponent } from './customer/components/cart/cart.component';
 import { PostCouponComponent } from './admin/components/post-coupon/post-coupon.component';
 import { CouponsComponent } from './admin/components/coupons/coupons.component';
 import { OrdersComponent } from './admin/components/orders/orders.component';
+import { MyOrdersComponent } from './customer/components/my-orders/my-orders.component';
+import { PostProductFaqComponent } from './admin/components/post-product-faq/post-product-faq.component';
+import { UpdateProductComponent } from './admin/components/update-product/update-product.component';
 
 export const routes: Routes = [
   {
@@ -60,5 +63,17 @@ export const routes: Routes = [
   {
     path: 'admin/orders',
     component: OrdersComponent,
+  },
+  {
+    path: 'customer/my-orders',
+    component: MyOrdersComponent,
+  },
+  {
+    path: 'admin/faq/:productId',
+    component: PostProductFaqComponent,
+  },
+  {
+    path: 'admin/product/:productId',
+    component: UpdateProductComponent,
   },
 ];

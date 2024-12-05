@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <h2>My Orders</h2>
+  <div *ngIf="myOrders?.length; else noOrders">
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>#</th>
+          <th>Tracking ID</th>
+          <th>Net Amount</th>
+          <th>Description</th>
+          <th>Address</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of myOrders; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ order.trackingId }}</td>
+          <td>{{ order.totalAmount | currency }}</td>
+          <td>{{ order.orderDescription }}</td>
+          <td>{{ order.address }}</td>
+          <td>{{ order.date | date : "medium" }}</td>
+          <td>{{ order.orderStatus }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #noOrders>
+    <p class="text-center text-muted">No orders found.</p>
+  </ng-template>
+</div>
