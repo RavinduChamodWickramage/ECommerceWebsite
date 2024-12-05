@@ -101,6 +101,21 @@ export class CustomerService {
     });
   }
 
+  getOrderedProducts(orderId: any): Observable<any> {
+    return this.http.get(
+      BASIC_URL + `api/customer/ordered-products/${orderId}`,
+      {
+        headers: this.createAuthorizationHeader(),
+      }
+    );
+  }
+
+  giveReview(reviewDto: any): Observable<any> {
+    return this.http.post(BASIC_URL + `api/customer/review`, reviewDto, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
   private createAuthorizationHeader(): HttpHeaders {
     const token = UserStorageService.getToken();
     console.log('Authorization Token:', token);

@@ -1,0 +1,96 @@
+<div class="container mt-4">
+  <h2>Submit Review</h2>
+
+  <div
+    *ngIf="alertMessage"
+    class="alert alert-{{ alertType }} alert-dismissible fade show"
+    role="alert"
+  >
+    {{ alertMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="resetAlertMessage()"
+      aria-label="Close"
+    ></button>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div *ngIf="imagePreview" class="mt-2 mb-3 d-flex justify-content-center">
+        <img
+          [src]="imagePreview"
+          alt="Image Preview"
+          class="img-thumbnail"
+          style="max-width: 200px; height: auto"
+        />
+      </div>
+
+      <form [formGroup]="reviewForm" (ngSubmit)="submitForm()">
+        <div class="mb-3">
+          <label for="rating" class="form-label">Rating</label>
+          <select id="rating" class="form-select" formControlName="rating">
+            <option value="">Select Rating</option>
+            <option *ngFor="let rate of [1, 2, 3, 4, 5]" [value]="rate">
+              {{ rate }} {{ rate === 1 ? "Star" : "Stars" }}
+            </option>
+          </select>
+          <div
+            *ngIf="
+              reviewForm.controls['rating'].invalid &&
+              reviewForm.controls['rating'].touched
+            "
+            class="invalid-feedback"
+          >
+            Rating is required and must be between 1 and 5.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            id="description"
+            class="form-control"
+            formControlName="description"
+            rows="4"
+            [ngClass]="{
+              'is-invalid':
+                reviewForm.controls['description'].invalid &&
+                reviewForm.controls['description'].touched
+            }"
+          ></textarea>
+          <div
+            *ngIf="
+              reviewForm.controls['description'].invalid &&
+              reviewForm.controls['description'].touched
+            "
+            class="invalid-feedback"
+          >
+            Description is required.
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="img" class="form-label">Upload Image</label>
+          <input
+            type="file"
+            id="img"
+            class="form-control"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+          />
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="reviewForm.invalid"
+          >
+            Submit Review
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

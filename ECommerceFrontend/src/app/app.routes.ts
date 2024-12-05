@@ -14,6 +14,8 @@ import { OrdersComponent } from './admin/components/orders/orders.component';
 import { MyOrdersComponent } from './customer/components/my-orders/my-orders.component';
 import { PostProductFaqComponent } from './admin/components/post-product-faq/post-product-faq.component';
 import { UpdateProductComponent } from './admin/components/update-product/update-product.component';
+import { ViewOrderedProductsComponent } from './customer/components/view-ordered-products/view-ordered-products.component';
+import { ReviewOrderedProductComponent } from './customer/components/review-ordered-product/review-ordered-product.component';
 
 export const routes: Routes = [
   {
@@ -75,5 +77,13 @@ export const routes: Routes = [
   {
     path: 'admin/product/:productId',
     component: UpdateProductComponent,
+  },
+  {
+    path: 'customer/ordered-products/:orderId',
+    component: ViewOrderedProductsComponent,
+  },
+  {
+    path: 'customer/review/:productId',
+    component: ReviewOrderedProductComponent,
   },
 ];

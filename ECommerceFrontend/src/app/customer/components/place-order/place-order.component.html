@@ -16,7 +16,6 @@
   </div>
 
   <form [formGroup]="orderForm" (ngSubmit)="placeOrder()">
-    <!-- Delivery Address -->
     <div class="mb-3">
       <label for="address" class="form-label">Delivery Address</label>
       <textarea
@@ -35,7 +34,6 @@
       </div>
     </div>
 
-    <!-- Optional Description -->
     <div class="mb-3">
       <label for="description" class="form-label">Order Description</label>
       <textarea
@@ -45,7 +43,6 @@
       ></textarea>
     </div>
 
-    <!-- Submit Button -->
     <div class="text-end">
       <button
         type="submit"

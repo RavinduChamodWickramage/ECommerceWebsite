@@ -1,0 +1,92 @@
+<div class="container mt-4">
+  <h2>Ordered Products</h2>
+
+  <!-- Alert Message -->
+  <div
+    *ngIf="alertMessage"
+    class="alert alert-{{ alertType }} alert-dismissible fade show"
+    role="alert"
+  >
+    {{ alertMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="resetAlertMessage()"
+      aria-label="Close"
+    ></button>
+  </div>
+  <!-- End Alert Message -->
+
+  <div *ngIf="orderedProductDetailsList?.length; else noProducts">
+    <div class="row">
+      <div
+        class="col-sm-6 col-md-4 col-lg-3 mb-4"
+        *ngFor="let product of orderedProductDetailsList"
+      >
+        <div class="card h-100 shadow-sm">
+          <img
+            *ngIf="product.productImage"
+            [src]="product.productImage"
+            class="card-img-top"
+            alt="{{ product.name }}"
+            style="height: 200px; object-fit: contain"
+            width="300"
+            height="300"
+          />
+
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+
+            <p
+              class="card-text text-truncate"
+              *ngIf="!product.showFullDescription"
+            >
+              {{ product.description | slice : 0 : 100 }}...
+            </p>
+            <p class="card-text" *ngIf="product.showFullDescription">
+              {{ product.description }}
+            </p>
+
+            <button
+              (click)="toggleDescription(product)"
+              class="btn btn-link p-0"
+              style="font-size: 0.9rem; color: #002042; text-decoration: none"
+            >
+              {{ product.showFullDescription ? "Show Less" : "Show More" }}
+            </button>
+          </div>
+
+          <div class="product-details mt-3 row m-1">
+            <div class="col-6">
+              <p class="product-price mb-0">
+                <strong>Price:</strong> {{ product.price | currency }}
+              </p>
+            </div>
+            <div class="col-6 text-end">
+              <p class="product-category mb-0 text-muted">
+                <strong>Quantity:</strong> {{ product.quantity }}
+              </p>
+            </div>
+          </div>
+
+          <div class="card-footer d-flex justify-content-end">
+            <button
+              class="btn btn-outline-primary btn-sm m-1"
+              (click)="giveReview(product.id)"
+            >
+              Give Review
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 text-right">
+      <h4>Total Amount: {{ totalAmount | currency }}</h4>
+    </div>
+  </div>
+
+  <ng-template #noProducts>
+    <p class="text-center text-muted">No products found for this order.</p>
+  </ng-template>
+</div>

@@ -1,5 +1,20 @@
 <div class="container mt-4">
   <h2>My Orders</h2>
+
+  <div
+    *ngIf="alertMessage"
+    class="alert alert-{{ alertType }} alert-dismissible fade show"
+    role="alert"
+  >
+    {{ alertMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="resetAlertMessage()"
+      aria-label="Close"
+    ></button>
+  </div>
+
   <div *ngIf="myOrders?.length; else noOrders">
     <table class="table table-bordered table-striped">
       <thead class="thead-dark">
@@ -11,6 +26,7 @@
           <th>Address</th>
           <th>Date</th>
           <th>Status</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -22,6 +38,15 @@
           <td>{{ order.address }}</td>
           <td>{{ order.date | date : "medium" }}</td>
           <td>{{ order.orderStatus }}</td>
+          <td>
+            <button
+              class="btn btn-primary btn-sm"
+              [disabled]="order.orderStatus !== 'DELIVERED'"
+              (click)="navigateToReview(order.id)"
+            >
+              Review
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

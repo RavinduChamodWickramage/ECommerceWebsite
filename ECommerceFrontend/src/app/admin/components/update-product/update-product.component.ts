@@ -62,7 +62,7 @@ export class UpdateProductComponent {
         description: data.description,
         categoryId: data.categoryId,
       });
-      this.previewImage = data.byteImg; // Assuming `byteImg` is a base64 string of the image
+      this.previewImage = data.byteImg; 
     });
   }
 
@@ -119,7 +119,7 @@ export class UpdateProductComponent {
       formData.append('categoryId', this.productForm.value.categoryId);
 
       if (this.selectedImage) {
-        formData.append('img', this.selectedImage); // Add the new image if it's selected
+        formData.append('img', this.selectedImage);
       }
 
       this.adminService.updateProduct(this.productId!, formData).subscribe({
