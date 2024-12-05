@@ -8,6 +8,7 @@ import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.Base64;
 import java.util.List;
 
 @Entity
@@ -46,7 +47,8 @@ public class Product {
         productDto.setName(name);
         productDto.setPrice(price);
         productDto.setDescription(description);
-        productDto.setByteImg(img);
+//        productDto.setByteImg(img);
+        productDto.setByteImg(img != null ? Base64.getEncoder().encodeToString(img) : null); // Convert byte array to base64 string
         productDto.setCategoryId(category.getId());
         productDto.setCategoryName(category.getName());
         return productDto;

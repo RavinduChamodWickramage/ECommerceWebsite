@@ -38,7 +38,9 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public ResponseEntity<?> addProductInCart(AddProductInCartDto addProductInCartDto) {
+
         Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(), OrderStatus.PENDING);
+
 
         if (activeOrder == null) {
             User user = userRepository.findById(addProductInCartDto.getUserId()).orElse(null);
@@ -46,27 +48,29 @@ public class CartServiceImpl implements CartService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
             }
 
+
             activeOrder = new Order();
             activeOrder.setUser(user);
             activeOrder.setOrderStatus(OrderStatus.PENDING);
             activeOrder.setTotalAmount(0L);
             activeOrder.setAmount(0L);
+            activeOrder.setCartItems(new ArrayList<>());
 
-            if (activeOrder.getCartItems() == null) {
-                activeOrder.setCartItems(new ArrayList<>());
-            }
 
             orderRepository.save(activeOrder);
         }
+
 
         Optional<CartItems> optionalCartItems =
                 cartItemsRepository.findByProductIdAndOrderIdAndUserId(addProductInCartDto.getProductId(),
                         activeOrder.getId(), addProductInCartDto.getUserId());
 
         if (optionalCartItems.isPresent()) {
+
             CartItems cartItem = optionalCartItems.get();
             cartItem.setQuantity(cartItem.getQuantity() + 1);
             cartItemsRepository.save(cartItem);
+
 
             activeOrder.setTotalAmount(activeOrder.getTotalAmount() + cartItem.getPrice());
             activeOrder.setAmount(activeOrder.getAmount() + cartItem.getPrice());
@@ -74,10 +78,12 @@ public class CartServiceImpl implements CartService {
 
             return ResponseEntity.status(HttpStatus.OK).body(cartItem.getCartDto());
         } else {
+
             Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
             Optional<User> optionalUser = userRepository.findById(addProductInCartDto.getUserId());
 
             if (optionalProduct.isPresent() && optionalUser.isPresent()) {
+
                 CartItems cart = new CartItems();
                 cart.setProduct(optionalProduct.get());
                 cart.setPrice((long) optionalProduct.get().getPrice());
@@ -86,10 +92,6 @@ public class CartServiceImpl implements CartService {
                 cart.setOrder(activeOrder);
 
                 cartItemsRepository.save(cart);
-
-                if (activeOrder.getCartItems() == null) {
-                    activeOrder.setCartItems(new ArrayList<>());
-                }
 
                 activeOrder.getCartItems().add(cart);
 
@@ -103,6 +105,8 @@ public class CartServiceImpl implements CartService {
             }
         }
     }
+
+
 
 
     @Override
@@ -294,8 +298,6 @@ public class CartServiceImpl implements CartService {
         return activeOrder.getOrderDto();
     }
 
-
-
     @Override
     @Transactional
     public OrderDto clearCart(Long userId) {
@@ -342,13 +344,14 @@ public class CartServiceImpl implements CartService {
         return activeOrder.getOrderDto();
     }
 
-
-
     @Override
     public List<OrderDto> getMyPlacedOrders(Long userId) {
-        return orderRepository.findByUserIdAndOrderStatusIn(userId,List.of(OrderStatus.PLACED, OrderStatus.SHIPPED,
-                OrderStatus.DELIVERED)).stream().map(Order::getOrderDto).collect(Collectors.toList());
+        return orderRepository.findByUserIdAndOrderStatusIn(userId, List.of(OrderStatus.PLACED, OrderStatus.SHIPPED, OrderStatus.DELIVERED))
+                .stream()
+                .map(Order::getOrderDto)
+                .collect(Collectors.toList());
     }
+
 
     private boolean couponIsExpired(Coupon coupon) {
         Date currentDate = new Date();
