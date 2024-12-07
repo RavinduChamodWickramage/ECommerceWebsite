@@ -1,0 +1,88 @@
+<div class="container mt-4">
+  <div
+    *ngIf="alertMessage"
+    class="alert alert-{{ alertType }} alert-dismissible fade show"
+    role="alert"
+  >
+    {{ alertMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="resetAlertMessage()"
+      aria-label="Close"
+    ></button>
+  </div>
+
+  <div *ngIf="product" class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h3>Product Details</h3>
+      <img
+        *ngIf="product.productImage"
+        [src]="product.productImage"
+        alt="{{ product.name }}"
+        class="card-img-top"
+        style="height: 300px; object-fit: contain"
+      />
+    </div>
+
+    <div class="card-body">
+      <h5 class="card-title">{{ product.name }}</h5>
+      <p class="card-text">{{ product.description }}</p>
+      <p class="product-price">
+        <strong>Price:</strong> {{ product.price | currency }}
+      </p>
+      <div class="mt-3">
+        <button
+          class="btn btn-primary"
+          (click)="addToWishlist()"
+          [disabled]="wishlistAdded"
+        >
+          <i
+            class="me-2"
+            [ngClass]="wishlistAdded ? 'bi bi-heart-fill' : 'bi bi-heart'"
+          ></i>
+          {{ wishlistAdded ? "Already in Wishlist" : "Add to Wishlist" }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h3>Customer Reviews</h3>
+      <div *ngIf="!reviews.length">
+        <p>No reviews yet!</p>
+      </div>
+      <div *ngFor="let review of reviews" class="mb-3">
+        <div *ngIf="review.reviewImage" class="review-image">
+          <img
+            [src]="review.reviewImage"
+            alt="Reviewer's image"
+            class="rounded-circle"
+            style="width: 40px; height: 40px; object-fit: cover"
+          />
+        </div>
+        <p>
+          <strong>{{ review.username }}</strong> (Rating:
+          {{ review.rating }} stars)
+        </p>
+        <p>{{ review.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h3>Frequently Asked Questions</h3>
+      <div *ngIf="!FAQS.length">
+        <p>No FAQs yet!</p>
+      </div>
+      <div *ngFor="let faq of FAQS" class="mb-3">
+        <p>
+          <strong>{{ faq.question }}</strong>
+        </p>
+        <p>{{ faq.answer }}</p>
+      </div>
+    </div>
+  </div>
+</div>

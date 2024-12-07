@@ -43,7 +43,13 @@
         />
 
         <div class="card-body">
-          <h5 class="card-title">{{ product.name }}</h5>
+          <h5
+            class="card-title"
+            style="cursor: pointer"
+            routerLink="/customer/product/{{ product.id }}"
+          >
+            {{ product.name }}
+          </h5>
           <p
             class="card-text text-truncate"
             *ngIf="!product.showFullDescription"

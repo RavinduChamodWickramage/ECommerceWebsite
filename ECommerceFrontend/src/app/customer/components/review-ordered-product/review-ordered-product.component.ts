@@ -77,6 +77,11 @@ export class ReviewOrderedProductComponent {
     this.customerService.giveReview(formData).subscribe({
       next: () => {
         this.router.navigate(['/customer/my-orders']);
+
+        this.reviewForm.reset();
+        this.selectedFile = null;
+        this.imagePreview = null;
+
         this.alertMessage = 'Review submitted successfully!';
         this.alertType = 'success';
       },

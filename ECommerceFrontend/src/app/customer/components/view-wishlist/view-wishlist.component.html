@@ -1,0 +1,62 @@
+<div class="container mt-4">
+  <h2>Your Wishlist</h2>
+
+  <div
+    *ngIf="alertMessage"
+    class="alert alert-{{ alertType }} alert-dismissible fade show"
+    role="alert"
+  >
+    {{ alertMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="resetAlertMessage()"
+      aria-label="Close"
+    ></button>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center my-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="products.length > 0" class="row">
+    <div
+      *ngFor="let product of products"
+      class="col-sm-6 col-md-4 col-lg-3 mb-4"
+    >
+      <div class="card h-100 shadow-sm">
+        <img
+          *ngIf="product.image"
+          [src]="product.image"
+          alt="{{ product.name }}"
+          class="card-img-top"
+          style="height: 200px; object-fit: contain"
+          width="300"
+          height="300"
+        />
+        <div class="card-body">
+          <h5
+            class="card-title"
+            style="cursor: pointer"
+            routerLink="/customer/product/{{ product.id }}"
+          >
+            {{ product.productName }}
+          </h5>
+          <p class="card-text">
+            <strong>Price:</strong> {{ product.price | currency }}
+          </p>
+          <p class="card-text">
+            <small class="text-muted">{{ product.productDescription }}</small>
+          </p>
+        </div>
+        <div class="card-footer text-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && products.length === 0" class="text-center my-4">
+    <p class="text-muted">Your wishlist is empty.</p>
+  </div>
+</div>
