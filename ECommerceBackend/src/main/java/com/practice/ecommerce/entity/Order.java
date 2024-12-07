@@ -62,6 +62,7 @@ public class Order {
         orderDto.setOrderStatus(orderStatus);
         orderDto.setUserName(user.getName());
         orderDto.setOrderDescription(orderDescription);
+        orderDto.setCartItems(new ArrayList<>()); // Initialize cartItems list
 
         if (coupon != null) {
             orderDto.setCouponName(coupon.getName());

@@ -47,10 +47,10 @@ public class Product {
         productDto.setName(name);
         productDto.setPrice(price);
         productDto.setDescription(description);
-//        productDto.setByteImg(img);
-        productDto.setByteImg(img != null ? Base64.getEncoder().encodeToString(img) : null); // Convert byte array to base64 string
+        productDto.setByteImg(img != null ? Base64.getEncoder().encodeToString(img) : null);
         productDto.setCategoryId(category.getId());
         productDto.setCategoryName(category.getName());
+        productDto.setQuantity((long) cartItems.size());
         return productDto;
     }
 
