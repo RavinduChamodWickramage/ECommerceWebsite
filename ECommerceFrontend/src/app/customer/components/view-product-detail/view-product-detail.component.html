@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<div class="container mt-4 p-5">
   <div
     *ngIf="alertMessage"
     class="alert alert-{{ alertType }} alert-dismissible fade show"
@@ -63,9 +63,11 @@
           />
         </div>
         <p>
-          <strong>{{ review.username }}</strong> (Rating:
-          {{ review.rating }} stars)
+          <strong>{{ review.username }}</strong>
+          (Rating:
+          <span class="text-primary">{{ review.rating }} stars</span>)
         </p>
+
         <p>{{ review.description }}</p>
       </div>
     </div>

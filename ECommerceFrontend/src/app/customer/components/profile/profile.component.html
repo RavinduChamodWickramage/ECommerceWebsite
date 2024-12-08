@@ -1,0 +1,165 @@
+<div class="container pt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <!-- Alert message -->
+      <div
+        *ngIf="alertMessage"
+        class="alert alert-{{ alertType }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ alertMessage }}
+        <button
+          type="button"
+          class="btn-close"
+          (click)="resetAlert()"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <!-- Profile Card -->
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+          <h4>Profile</h4>
+        </div>
+
+        <div class="card-body">
+          <!-- Profile Form -->
+          <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+            <!-- Name Field -->
+            <div class="form-group">
+              <label for="name">Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name"
+                id="name"
+                placeholder="Enter your name"
+                [readonly]="!isEditMode"
+              />
+              <small
+                class="text-danger"
+                *ngIf="formControls['name'].touched && formControls['name'].errors?.['required']"
+                >Name is required.</small
+              >
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group mt-3">
+              <label for="email">Email:</label>
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email"
+                id="email"
+                placeholder="Enter your email"
+                [readonly]="!isEditMode"
+              />
+              <small
+                class="text-danger"
+                *ngIf="formControls['email'].touched && formControls['email'].errors?.['required']"
+                >Email is required.</small
+              >
+              <small
+                class="text-danger"
+                *ngIf="formControls['email'].touched && formControls['email'].errors?.['email']"
+                >Please enter a valid email.</small
+              >
+            </div>
+
+            <!-- Password Field (Visible in Edit Mode) -->
+            <div class="form-group mt-3" *ngIf="isEditMode">
+              <label for="password">Password:</label>
+              <div class="input-group">
+                <input
+                  type="{{ hidePassword ? 'password' : 'text' }}"
+                  class="form-control"
+                  formControlName="password"
+                  id="password"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="togglePasswordVisibility('password')"
+                >
+                  <i
+                    class="bi"
+                    [ngClass]="hidePassword ? 'bi-eye-slash' : 'bi-eye'"
+                  ></i>
+                </button>
+              </div>
+              <small
+                class="text-danger"
+                *ngIf="formControls['password'].touched && formControls['password'].errors?.['required']"
+                >Password is required.</small
+              >
+            </div>
+
+            <!-- Confirm Password Field (Visible in Edit Mode) -->
+            <div class="form-group mt-3" *ngIf="isEditMode">
+              <label for="confirmPassword">Confirm Password:</label>
+              <div class="input-group">
+                <input
+                  type="{{ hideConfirmPassword ? 'password' : 'text' }}"
+                  class="form-control"
+                  formControlName="confirmPassword"
+                  id="confirmPassword"
+                  placeholder="Confirm your password"
+                />
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="togglePasswordVisibility('confirmPassword')"
+                >
+                  <i
+                    class="bi"
+                    [ngClass]="hideConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"
+                  ></i>
+                </button>
+              </div>
+              <small
+                class="text-danger"
+                *ngIf="formControls['confirmPassword'].touched && formControls['confirmPassword'].errors?.['required']"
+                >Confirm Password is required.</small
+              >
+              <small
+                class="text-danger"
+                *ngIf="formControls['confirmPassword'].touched && formControls['confirmPassword'].errors?.['passwordMismatch']"
+                >Passwords do not match.</small
+              >
+            </div>
+
+            <!-- Update Profile Button -->
+            <div class="pt-3">
+              <button
+                type="submit"
+                class="btn btn-primary w-100 py-2"
+                [disabled]="profileForm.invalid || !isEditMode"
+              >
+                Update Profile
+              </button>
+            </div>
+          </form>
+
+          <!-- Edit Profile / Cancel Button -->
+          <div class="text-center mt-3">
+            <button
+              *ngIf="!isEditMode"
+              class="btn btn-secondary"
+              (click)="toggleEditMode()"
+            >
+              Edit Profile
+            </button>
+            <button
+              *ngIf="isEditMode"
+              class="btn btn-secondary"
+              (click)="toggleEditMode()"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

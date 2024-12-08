@@ -19,14 +19,14 @@
     <table class="table table-bordered table-striped">
       <thead class="thead-dark">
         <tr>
-          <th>#</th>
-          <th>Tracking ID</th>
-          <th>Net Amount</th>
-          <th>Description</th>
-          <th>Address</th>
-          <th>Date</th>
-          <th>Status</th>
-          <th>Action</th>
+          <th class="bg-primary text-white">#</th>
+          <th class="bg-primary text-white">Tracking ID</th>
+          <th class="bg-primary text-white">Net Amount</th>
+          <th class="bg-primary text-white">Description</th>
+          <th class="bg-primary text-white">Address</th>
+          <th class="bg-primary text-white">Date</th>
+          <th class="bg-primary text-white">Status</th>
+          <th class="bg-primary text-white">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -40,7 +40,7 @@
           <td>{{ order.orderStatus }}</td>
           <td>
             <button
-              class="btn btn-primary btn-sm"
+              class="btn btn-success btn-sm"
               [disabled]="order.orderStatus !== 'DELIVERED'"
               (click)="navigateToReview(order.id)"
             >

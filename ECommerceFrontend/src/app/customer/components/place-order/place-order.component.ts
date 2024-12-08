@@ -43,11 +43,16 @@ export class PlaceOrderComponent {
       return;
     }
 
-    console.log('Form Value:', this.orderForm.value);
+    const orderDto = {
+      ...this.orderForm.value,
+      orderDescription: this.orderForm.value.description,
+    };
 
-    this.customerService.placeOrder(this.orderForm.value).subscribe({
+    console.log('Form Value:', orderDto);
+
+    this.customerService.placeOrder(orderDto).subscribe({
       next: (response) => {
-        console.log('Order placed successfully', response);
+        console.log('Placed order: ', response);
         this.alertMessage = 'Order placed successfully!';
         this.alertType = 'success';
         this.router.navigate(['/customer/my-orders']);

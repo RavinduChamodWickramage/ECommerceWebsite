@@ -16,13 +16,13 @@
       </div>
 
       <div *ngIf="coupons.length > 0; else noCoupons">
-        <table class="table table-striped">
+        <table class="table table-striped table-bordered">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Code</th>
-              <th>Discount</th>
-              <th>Expiration Date</th>
+              <th class="bg-primary text-white">Name</th>
+              <th class="bg-primary text-white">Code</th>
+              <th class="bg-primary text-white">Discount</th>
+              <th class="bg-primary text-white">Expiration Date</th>
             </tr>
           </thead>
           <tbody>

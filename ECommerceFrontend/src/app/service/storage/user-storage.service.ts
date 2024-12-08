@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 const TOKEN_KEY = 'ecom-token';
 const USER_KEY = 'ecom-user';
@@ -74,5 +75,12 @@ export class UserStorageService {
   static signOut(): void {
     window.localStorage.removeItem(TOKEN_KEY);
     window.localStorage.removeItem(USER_KEY);
+  }
+
+  static redirectToLoginIfNotAuthenticated(router: Router): void {
+    const token = UserStorageService.getToken();
+    if (!token) {
+      router.navigate(['/login']);
+    }
   }
 }

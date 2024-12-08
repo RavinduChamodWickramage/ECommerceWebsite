@@ -20,6 +20,7 @@ import { ViewProductDetailComponent } from './customer/components/view-product-d
 import { ViewWishlistComponent } from './customer/components/view-wishlist/view-wishlist.component';
 import { TrackOrderComponent } from './track-order/track-order.component';
 import { AnalyticsComponent } from './admin/components/analytics/analytics.component';
+import { ProfileComponent } from './customer/components/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -105,5 +106,9 @@ export const routes: Routes = [
   {
     path: 'admin/analytics',
     component: AnalyticsComponent,
+  },
+  {
+    path: 'customer/profile',
+    component: ProfileComponent,
   },
 ];

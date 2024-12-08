@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'ECommerceFrontend';
+  title = 'E-Commerce Website';
 
   isAdminLoggedIn: boolean = UserStorageService.isAdminLoggedIn();
   isCustomerLoggedIn: boolean = UserStorageService.isCustomerLoggedIn();

@@ -144,6 +144,22 @@ export class CustomerService {
     );
   }
 
+  getUserProfile(userId: any): Observable<any> {
+    return this.http.get(BASIC_URL + `api/customer/profile/${userId}`, {
+      headers: this.createAuthorizationHeader(),
+    });
+  }
+
+  updateProfile(userId: any, profileUpdateRequest: any): Observable<any> {
+    return this.http.put(
+      BASIC_URL + `api/customer/profile`,
+      profileUpdateRequest,
+      {
+        headers: this.createAuthorizationHeader(),
+      }
+    );
+  }
+
   private createAuthorizationHeader(): HttpHeaders {
     const token = UserStorageService.getToken();
     console.log('Authorization Token:', token);

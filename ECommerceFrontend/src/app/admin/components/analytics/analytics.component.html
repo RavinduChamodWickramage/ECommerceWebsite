@@ -12,44 +12,116 @@
   ></button>
 </div>
 
-<!-- Analytics Data -->
-<div *ngIf="analyticsData">
+<div class="text-center p-5" *ngIf="analyticsData">
   <h3>Analytics Overview</h3>
 
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Orders Overview</h5>
-      <p><strong>Placed Orders:</strong> {{ analyticsData.placed }}</p>
-      <p><strong>Shipped Orders:</strong> {{ analyticsData.shipped }}</p>
-      <p><strong>Delivered Orders:</strong> {{ analyticsData.delivered }}</p>
+  <div class="card shadow-sm mb-4 text-center p-3">
+    <h5 class="card-title">Orders Overview</h5>
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm border-primary">
+          <div class="card-header py-3 text-bg-primary border-primary">
+            <h5 class="card-title pricing-card-title">Placed Orders</h5>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title pricing-card-title">
+              {{ analyticsData.placed }}
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm border-primary">
+          <div class="card-header py-3 text-bg-primary border-primary">
+            <h5 class="card-title pricing-card-title">Shipped Orders</h5>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title pricing-card-title">
+              {{ analyticsData.shipped }}
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm border-primary">
+          <div class="card-header py-3 text-bg-primary border-primary">
+            <h5 class="card-title pricing-card-title">Delivered Orders</h5>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title pricing-card-title">
+              {{ analyticsData.delivered }}
+            </h5>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Monthly Orders</h5>
-      <p>
-        <strong>Current Month Orders:</strong>
-        {{ analyticsData.currentMonthOrders }}
-      </p>
-      <p>
-        <strong>Previous Month Orders:</strong>
-        {{ analyticsData.previousMonthOrders }}
-      </p>
+  <div class="card shadow-sm mb-4 text-center p-3">
+    <h5 class="card-title">Monththly Orders Overview</h5>
+    <div class="row row-cols-1 row-cols-md-2 mb-3 text-center">
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm border-primary">
+          <div class="card-header py-3 text-bg-primary border-primary">
+            <h5 class="card-title pricing-card-title">Current Month Orders</h5>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title pricing-card-title">
+              {{ analyticsData.currentMonthOrders }}
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm border-primary">
+          <div class="card-header py-3 text-bg-primary border-primary">
+            <h5 class="card-title pricing-card-title">Previous Month Orders</h5>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title pricing-card-title">
+              {{ analyticsData.previousMonthOrders }}
+            </h5>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Monthly Earnings</h5>
-      <p>
-        <strong>Current Month Earnings:</strong>
-        {{ analyticsData.currentMonthEarnings | currency }}
-      </p>
-      <p>
-        <strong>Previous Month Earnings:</strong>
-        {{ analyticsData.previousMonthEarnings | currency }}
-      </p>
+  <div class="card shadow-sm mb-4 text-center p-3">
+    <h5 class="card-title">Monththly Earnings Overview</h5>
+    <div class="row row-cols-1 row-cols-md-2 mb-3 text-center">
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm border-primary">
+          <div class="card-header py-3 text-bg-primary border-primary">
+            <h5 class="card-title pricing-card-title">
+              Current Month Earnings
+            </h5>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title pricing-card-title">
+              {{ analyticsData.currentMonthEarnings | currency }}
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm border-primary">
+          <div class="card-header py-3 text-bg-primary border-primary">
+            <h5 class="card-title pricing-card-title">
+              Previous Month Earnings
+            </h5>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title pricing-card-title">
+              {{ analyticsData.previousMonthEarnings | currency }}
+            </h5>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
