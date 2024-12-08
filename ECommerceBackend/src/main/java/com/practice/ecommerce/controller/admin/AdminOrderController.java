@@ -1,5 +1,6 @@
 package com.practice.ecommerce.controller.admin;
 
+import com.practice.ecommerce.dto.AnalyticsResponse;
 import com.practice.ecommerce.dto.OrderDto;
 import com.practice.ecommerce.service.admin.order.AdminOrderService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,11 @@ public class AdminOrderController {
             return new ResponseEntity<>("Order not found", HttpStatus.BAD_REQUEST);
 
         return ResponseEntity.status(HttpStatus.OK).body(orderDto);
+    }
+
+    @GetMapping("/order/analytics")
+    public ResponseEntity<AnalyticsResponse> getAnalytics() {
+        return ResponseEntity.ok(adminOrderService.calculateAnalytics());
     }
 
 }

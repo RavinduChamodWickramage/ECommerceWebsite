@@ -352,6 +352,16 @@ public class CartServiceImpl implements CartService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public OrderDto searchOrderByTrackingId(UUID trackingId) {
+        Optional<Order> optionalOrder = orderRepository.findByTrackingId(trackingId);
+
+        if (optionalOrder.isPresent()) {
+            return optionalOrder.get().getOrderDto();
+        }
+        return null;
+    }
+
 
     private boolean couponIsExpired(Coupon coupon) {
         Date currentDate = new Date();
