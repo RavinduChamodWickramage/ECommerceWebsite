@@ -18,6 +18,8 @@ import { ViewOrderedProductsComponent } from './customer/components/view-ordered
 import { ReviewOrderedProductComponent } from './customer/components/review-ordered-product/review-ordered-product.component';
 import { ViewProductDetailComponent } from './customer/components/view-product-detail/view-product-detail.component';
 import { ViewWishlistComponent } from './customer/components/view-wishlist/view-wishlist.component';
+import { TrackOrderComponent } from './track-order/track-order.component';
+import { AnalyticsComponent } from './admin/components/analytics/analytics.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +37,10 @@ export const routes: Routes = [
   {
     path: 'customer',
     component: CustomerComponent,
+  },
+  {
+    path: 'order',
+    component: TrackOrderComponent,
   },
   {
     path: 'admin/dashboard',
@@ -95,5 +101,9 @@ export const routes: Routes = [
   {
     path: 'customer/wishlist',
     component: ViewWishlistComponent,
+  },
+  {
+    path: 'admin/analytics',
+    component: AnalyticsComponent,
   },
 ];

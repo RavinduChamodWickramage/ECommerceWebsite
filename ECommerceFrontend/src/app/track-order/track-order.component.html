@@ -1,0 +1,75 @@
+<div class="container mt-4">
+  <div
+    *ngIf="alertMessage"
+    class="alert alert-{{ alertType }} alert-dismissible fade show"
+    role="alert"
+  >
+    {{ alertMessage }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="alertMessage = null"
+      aria-label="Close"
+    ></button>
+  </div>
+
+  <form [formGroup]="searchOrderForm" (ngSubmit)="submitForm()">
+    <div class="mb-3">
+      <label for="trackingId" class="form-label">Enter Tracking ID</label>
+      <input
+        id="trackingId"
+        type="text"
+        class="form-control"
+        formControlName="trackingId"
+        placeholder="Enter your tracking ID"
+      />
+      <div
+        *ngIf="
+          searchOrderForm.get('trackingId')?.invalid &&
+          searchOrderForm.get('trackingId')?.touched
+        "
+        class="text-danger"
+      >
+        Tracking ID is required.
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="searchOrderForm.invalid"
+    >
+      Track Order
+    </button>
+  </form>
+
+  <div *ngIf="orderDetails" class="mt-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title">Order Details</h3>
+        <p><strong>Order ID:</strong> {{ orderDetails.id }}</p>
+        <p><strong>Tracking ID:</strong> {{ orderDetails.trackingId }}</p>
+        <p><strong>User Name:</strong> {{ orderDetails.userName }}</p>
+        <p><strong>Address:</strong> {{ orderDetails.address }}</p>
+        <p><strong>Order Status:</strong> {{ orderDetails.orderStatus }}</p>
+        <p><strong>Date:</strong> {{ orderDetails.date | date : "short" }}</p>
+        <p><strong>Amount:</strong> {{ orderDetails.amount | currency }}</p>
+        <p>
+          <strong>Total Amount:</strong>
+          {{ orderDetails.totalAmount | currency }}
+        </p>
+        <p>
+          <strong>Coupon Name:</strong>
+          {{ orderDetails.couponName || "No coupon applied" }}
+        </p>
+        <p>
+          <strong>Discount:</strong>
+          {{ orderDetails.discount || "No discount applied" }}
+        </p>
+        <p>
+          <strong>Order Description:</strong>
+          {{ orderDetails.orderDescription || "No description provided" }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

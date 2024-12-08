@@ -1,0 +1,55 @@
+<div
+  *ngIf="alertMessage"
+  class="alert alert-{{ alertType }} alert-dismissible fade show"
+  role="alert"
+>
+  {{ alertMessage }}
+  <button
+    type="button"
+    class="btn-close"
+    (click)="resetAlert()"
+    aria-label="Close"
+  ></button>
+</div>
+
+<!-- Analytics Data -->
+<div *ngIf="analyticsData">
+  <h3>Analytics Overview</h3>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Orders Overview</h5>
+      <p><strong>Placed Orders:</strong> {{ analyticsData.placed }}</p>
+      <p><strong>Shipped Orders:</strong> {{ analyticsData.shipped }}</p>
+      <p><strong>Delivered Orders:</strong> {{ analyticsData.delivered }}</p>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Monthly Orders</h5>
+      <p>
+        <strong>Current Month Orders:</strong>
+        {{ analyticsData.currentMonthOrders }}
+      </p>
+      <p>
+        <strong>Previous Month Orders:</strong>
+        {{ analyticsData.previousMonthOrders }}
+      </p>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Monthly Earnings</h5>
+      <p>
+        <strong>Current Month Earnings:</strong>
+        {{ analyticsData.currentMonthEarnings | currency }}
+      </p>
+      <p>
+        <strong>Previous Month Earnings:</strong>
+        {{ analyticsData.previousMonthEarnings | currency }}
+      </p>
+    </div>
+  </div>
+</div>
