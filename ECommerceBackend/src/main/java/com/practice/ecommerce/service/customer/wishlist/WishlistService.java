@@ -1,4 +1,4 @@
-package com.practice.ecommerce.service.customer.customer;
+package com.practice.ecommerce.service.customer.wishlist;
 
 import com.practice.ecommerce.dto.WishlistDto;
 

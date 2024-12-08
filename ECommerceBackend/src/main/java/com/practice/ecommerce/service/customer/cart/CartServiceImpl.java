@@ -328,6 +328,7 @@ public class CartServiceImpl implements CartService {
                 activeOrder.setUser(optionalUser.get());
                 activeOrder.setOrderStatus(OrderStatus.PENDING);
                 activeOrder.setTrackingId(UUID.randomUUID());
+                activeOrder.setOrderDescription(placeOrderDto.getOrderDescription());
             } else {
                 return null;
             }
@@ -343,6 +344,7 @@ public class CartServiceImpl implements CartService {
 
         return activeOrder.getOrderDto();
     }
+
 
     @Override
     public List<OrderDto> getMyPlacedOrders(Long userId) {

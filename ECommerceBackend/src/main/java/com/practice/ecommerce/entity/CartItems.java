@@ -9,8 +9,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Data
-//@Table(name = "cart_items",
-//        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "user_id", "order_id"}))
 @Table(name = "cart_items")
 public class CartItems {
 

@@ -1,4 +1,4 @@
-package com.practice.ecommerce.service.customer;
+package com.practice.ecommerce.service.customer.product;
 
 import com.practice.ecommerce.dto.ProductDetailDto;
 import com.practice.ecommerce.dto.ProductDto;

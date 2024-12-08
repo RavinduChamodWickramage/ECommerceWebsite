@@ -63,14 +63,4 @@ public class CartController {
     public ResponseEntity<OrderDto> clearCart(@PathVariable Long userId) {
         return ResponseEntity.status(HttpStatus.OK).body(cartService.clearCart(userId));
     }
-
-    @PostMapping("/placeOrder")
-    public ResponseEntity<OrderDto> placeOrder(@RequestBody PlaceOrderDto placeOrderDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(cartService.placeOrder(placeOrderDto));
-    }
-
-    @GetMapping("/myOrders/{userId}")
-    public ResponseEntity<List<OrderDto>> getMyPlacedOrders(@PathVariable Long userId) {
-        return ResponseEntity.ok(cartService.getMyPlacedOrders(userId));
-    }
 }

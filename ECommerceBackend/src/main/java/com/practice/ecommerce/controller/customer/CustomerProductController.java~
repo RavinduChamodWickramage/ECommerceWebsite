@@ -2,7 +2,7 @@ package com.practice.ecommerce.controller.customer;
 
 import com.practice.ecommerce.dto.ProductDetailDto;
 import com.practice.ecommerce.dto.ProductDto;
-import com.practice.ecommerce.service.customer.product.CustomerProductService;
+import com.practice.ecommerce.service.customer.CustomerProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
