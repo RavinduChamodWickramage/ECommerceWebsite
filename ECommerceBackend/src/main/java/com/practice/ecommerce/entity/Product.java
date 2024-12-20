@@ -8,6 +8,7 @@ import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.math.BigDecimal;
 import java.util.Base64;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Product {
 
     private String name;
 
-    private double price;
+    private BigDecimal price;
 
     @Lob
     private String description;

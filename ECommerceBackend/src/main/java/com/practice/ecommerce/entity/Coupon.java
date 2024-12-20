@@ -3,6 +3,7 @@ package com.practice.ecommerce.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -18,7 +19,7 @@ public class Coupon {
 
     private String code;
 
-    private Long discount;
+    private BigDecimal discount;
 
     private Date expirationDate;
 }

@@ -3,6 +3,7 @@ package com.practice.ecommerce.service.admin.order;
 import com.practice.ecommerce.dto.AnalyticsResponse;
 import com.practice.ecommerce.dto.OrderDto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface AdminOrderService {
@@ -15,5 +16,5 @@ public interface AdminOrderService {
 
     Long getTotalOrdersForMonth(int month, int year);
 
-    Long getTotalEarningsForMonth(int month, int year);
+    BigDecimal getTotalEarningsForMonth(int month, int year);
 }

@@ -2,12 +2,14 @@ package com.practice.ecommerce.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class CartItemsDto {
 
     private Long id;
 
-    private Long price;
+    private BigDecimal price;
 
     private Long quantity;
 

@@ -2,6 +2,8 @@ package com.practice.ecommerce.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class WishlistDto {
 
@@ -17,5 +19,5 @@ public class WishlistDto {
 
     private byte[] returnedImg;
 
-    private Long price;
+    private BigDecimal price;
 }

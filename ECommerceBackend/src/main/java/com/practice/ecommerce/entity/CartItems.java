@@ -7,6 +7,8 @@ import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @Table(name = "cart_items")
@@ -16,7 +18,7 @@ public class CartItems {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long price;
+    private BigDecimal price;
 
     private Long quantity;
 

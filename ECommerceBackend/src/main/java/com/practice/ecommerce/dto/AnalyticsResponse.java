@@ -3,6 +3,8 @@ package com.practice.ecommerce.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 public class AnalyticsResponse {
@@ -17,7 +19,7 @@ public class AnalyticsResponse {
 
     private Long previousMonthOrders;
 
-    private Long currentMonthEarnings;
+    private BigDecimal currentMonthEarnings;
 
-    private Long previousMonthEarnings;
+    private BigDecimal previousMonthEarnings;
 }

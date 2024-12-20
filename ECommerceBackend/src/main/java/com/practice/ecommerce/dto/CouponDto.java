@@ -2,6 +2,7 @@ package com.practice.ecommerce.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 
 @Data
@@ -13,7 +14,7 @@ public class CouponDto {
 
     private String code;
 
-    private Long discount;
+    private BigDecimal discount;
 
     private Date expirationDate;
 }

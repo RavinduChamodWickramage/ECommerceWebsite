@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,8 +54,8 @@ public class CartServiceImpl implements CartService {
             activeOrder = new Order();
             activeOrder.setUser(user);
             activeOrder.setOrderStatus(OrderStatus.PENDING);
-            activeOrder.setTotalAmount(0L);
-            activeOrder.setAmount(0L);
+            activeOrder.setTotalAmount(BigDecimal.ZERO);
+            activeOrder.setAmount(BigDecimal.ZERO);
             activeOrder.setCartItems(new ArrayList<>());
 
 
@@ -72,8 +74,8 @@ public class CartServiceImpl implements CartService {
             cartItemsRepository.save(cartItem);
 
 
-            activeOrder.setTotalAmount(activeOrder.getTotalAmount() + cartItem.getPrice());
-            activeOrder.setAmount(activeOrder.getAmount() + cartItem.getPrice());
+            activeOrder.setTotalAmount(activeOrder.getTotalAmount().add(cartItem.getPrice()));
+            activeOrder.setAmount(activeOrder.getAmount().add(cartItem.getPrice()));
             orderRepository.save(activeOrder);
 
             return ResponseEntity.status(HttpStatus.OK).body(cartItem.getCartDto());
@@ -86,7 +88,7 @@ public class CartServiceImpl implements CartService {
 
                 CartItems cart = new CartItems();
                 cart.setProduct(optionalProduct.get());
-                cart.setPrice((long) optionalProduct.get().getPrice());
+                cart.setPrice((optionalProduct.get().getPrice()));
                 cart.setQuantity(1L);
                 cart.setUser(optionalUser.get());
                 cart.setOrder(activeOrder);
@@ -95,8 +97,8 @@ public class CartServiceImpl implements CartService {
 
                 activeOrder.getCartItems().add(cart);
 
-                activeOrder.setTotalAmount(activeOrder.getTotalAmount() + cart.getPrice());
-                activeOrder.setAmount(activeOrder.getAmount() + cart.getPrice());
+                activeOrder.setTotalAmount(activeOrder.getTotalAmount().add(cart.getPrice()));
+                activeOrder.setAmount(activeOrder.getAmount().add(cart.getPrice()));
                 orderRepository.save(activeOrder);
 
                 return ResponseEntity.status(HttpStatus.CREATED).body(cart.getCartDto());
@@ -118,8 +120,8 @@ public class CartServiceImpl implements CartService {
             User user = userRepository.findById(userId).orElseThrow(() -> new ValidationException("User not found."));
             activeOrder.setUser(user);
             activeOrder.setOrderStatus(OrderStatus.PENDING);
-            activeOrder.setTotalAmount(0L);
-            activeOrder.setAmount(0L);
+            activeOrder.setTotalAmount(BigDecimal.ZERO);
+            activeOrder.setAmount(BigDecimal.ZERO);
             activeOrder.setCartItems(new ArrayList<>());
 
             orderRepository.save(activeOrder);
@@ -157,11 +159,13 @@ public class CartServiceImpl implements CartService {
             throw new ValidationException("Coupon is expired.");
         }
 
-        double discountAmount = ((coupon.getDiscount() / 100.0) * activeOrder.getTotalAmount());
-        double netAmount = activeOrder.getTotalAmount() - discountAmount;
+        BigDecimal discountPercentage = coupon.getDiscount().divide(BigDecimal.valueOf(100));
+        BigDecimal discountAmount = activeOrder.getTotalAmount().multiply(discountPercentage);
+        BigDecimal netAmount = activeOrder.getTotalAmount().subtract(discountAmount);
 
-        activeOrder.setDiscount((long) discountAmount);
-        activeOrder.setAmount((long) netAmount);
+
+        activeOrder.setDiscount(discountAmount);
+        activeOrder.setAmount(netAmount);
         activeOrder.setCoupon(coupon);
 
         orderRepository.save(activeOrder);
@@ -196,15 +200,18 @@ public class CartServiceImpl implements CartService {
         CartItems cartItem = optionalCartItems.get();
         cartItem.setQuantity(cartItem.getQuantity() + 1);
 
-        activeOrder.setAmount((long) (activeOrder.getAmount() + product.getPrice()));
-        activeOrder.setTotalAmount((long) (activeOrder.getTotalAmount() + product.getPrice()));
+        activeOrder.setAmount(activeOrder.getAmount().add(product.getPrice()));
+        activeOrder.setTotalAmount(activeOrder.getTotalAmount().add(product.getPrice()));
 
         if (activeOrder.getCoupon() != null) {
-            double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount());
-            double netAmount = activeOrder.getTotalAmount() - discountAmount;
+            BigDecimal discountAmount = activeOrder.getTotalAmount()
+                    .multiply(activeOrder.getCoupon().getDiscount())
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
-            activeOrder.setDiscount((long) discountAmount);
-            activeOrder.setAmount((long) netAmount);
+            BigDecimal netAmount = activeOrder.getTotalAmount().subtract(discountAmount);
+
+            activeOrder.setDiscount(discountAmount);
+            activeOrder.setAmount(netAmount);
         }
 
         cartItemsRepository.save(cartItem);
@@ -212,6 +219,7 @@ public class CartServiceImpl implements CartService {
 
         return activeOrder.getOrderDto();
     }
+
 
     @Override
     @Transactional
@@ -246,15 +254,18 @@ public class CartServiceImpl implements CartService {
             cartItemsRepository.delete(cartItem);
         }
 
-        activeOrder.setAmount((long) (activeOrder.getAmount() - product.getPrice()));
-        activeOrder.setTotalAmount((long) (activeOrder.getTotalAmount() - product.getPrice()));
+        activeOrder.setAmount(activeOrder.getAmount().subtract(product.getPrice()));
+        activeOrder.setTotalAmount(activeOrder.getTotalAmount().subtract(product.getPrice()));
 
         if (activeOrder.getCoupon() != null) {
-            double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount());
-            double netAmount = activeOrder.getTotalAmount() - discountAmount;
+            BigDecimal discountAmount = activeOrder.getTotalAmount()
+                    .multiply(activeOrder.getCoupon().getDiscount())
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
-            activeOrder.setDiscount((long) discountAmount);
-            activeOrder.setAmount((long) netAmount);
+            BigDecimal netAmount = activeOrder.getTotalAmount().subtract(discountAmount);
+
+            activeOrder.setDiscount(discountAmount);
+            activeOrder.setAmount(netAmount);
         }
 
         orderRepository.save(activeOrder);
@@ -276,15 +287,18 @@ public class CartServiceImpl implements CartService {
 
         CartItems cartItem = optionalCartItems.get();
 
-        activeOrder.setAmount(activeOrder.getAmount() - cartItem.getPrice());
-        activeOrder.setTotalAmount(activeOrder.getTotalAmount() - cartItem.getPrice());
+        activeOrder.setAmount(activeOrder.getAmount().subtract(cartItem.getPrice()));
+        activeOrder.setTotalAmount(activeOrder.getTotalAmount().subtract(cartItem.getPrice()));
 
         if (activeOrder.getCoupon() != null) {
-            double discountAmount = (activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount();
-            double netAmount = activeOrder.getTotalAmount() - discountAmount;
+            BigDecimal discountAmount = activeOrder.getTotalAmount()
+                    .multiply(activeOrder.getCoupon().getDiscount())
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
-            activeOrder.setDiscount((long) discountAmount);
-            activeOrder.setAmount((long) netAmount);
+            BigDecimal netAmount = activeOrder.getTotalAmount().subtract(discountAmount);
+
+            activeOrder.setDiscount(discountAmount);
+            activeOrder.setAmount(netAmount);
         }
 
         cartItemsRepository.delete(cartItem);

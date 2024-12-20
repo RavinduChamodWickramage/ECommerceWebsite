@@ -3,6 +3,7 @@ package com.practice.ecommerce.dto;
 import com.practice.ecommerce.enums.OrderStatus;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -14,15 +15,15 @@ public class OrderDto {
 
     private Date date;
 
-    private Long amount;
+    private BigDecimal amount;
 
     private String address;
 
     private OrderStatus orderStatus;
 
-    private Long totalAmount;
+    private BigDecimal totalAmount;
 
-    private Long discount;
+    private BigDecimal discount;
 
     private UUID trackingId;
 
@@ -32,7 +33,7 @@ public class OrderDto {
 
     private String couponName;
 
-    private Long discountRate;
+    private BigDecimal discountRate;
 
     private String orderDescription;
 }

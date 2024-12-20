@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+
 @Data
 public class ProductDto {
 
@@ -11,7 +13,7 @@ public class ProductDto {
 
     private String name;
 
-    private double price;
+    private BigDecimal price;
 
     private String description;
 

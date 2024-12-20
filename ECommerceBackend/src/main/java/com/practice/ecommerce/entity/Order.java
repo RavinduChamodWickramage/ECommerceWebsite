@@ -7,6 +7,7 @@ import com.practice.ecommerce.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,15 +24,15 @@ public class Order {
 
     private Date date;
 
-    private Long amount;
+    private BigDecimal amount;
 
     private String address;
 
     private OrderStatus orderStatus;
 
-    private Long totalAmount;
+    private BigDecimal totalAmount;
 
-    private Long discount;
+    private BigDecimal discount;
 
     private UUID trackingId;
 
@@ -62,7 +63,7 @@ public class Order {
         orderDto.setOrderStatus(orderStatus);
         orderDto.setUserName(user.getName());
         orderDto.setOrderDescription(orderDescription);
-        orderDto.setCartItems(new ArrayList<>()); // Initialize cartItems list
+        orderDto.setCartItems(new ArrayList<>());
 
         if (coupon != null) {
             orderDto.setCouponName(coupon.getName());

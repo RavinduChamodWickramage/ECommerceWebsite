@@ -33,7 +33,7 @@ public class Wishlist {
         wishlistDto.setProductName(product.getName());
         wishlistDto.setProductDescription(product.getDescription());
         wishlistDto.setReturnedImg(product.getImg());
-        wishlistDto.setPrice(product.getPrice());
+        wishlistDto.setPrice((long) product.getPrice());
         wishlistDto.setUserId(user.getId());
         return wishlistDto;
     }

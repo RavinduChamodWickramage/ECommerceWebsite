@@ -2,14 +2,13 @@ package com.practice.ecommerce.service.admin.order;
 
 import com.practice.ecommerce.dto.AnalyticsResponse;
 import com.practice.ecommerce.dto.OrderDto;
-import com.practice.ecommerce.dto.ProductDto;
 import com.practice.ecommerce.entity.Order;
-import com.practice.ecommerce.entity.Product;
 import com.practice.ecommerce.enums.OrderStatus;
 import com.practice.ecommerce.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,8 +51,8 @@ public class AdminOrderServiceImpl implements AdminOrderService{
         Long currentMonthOrders = getTotalOrdersForMonth(currentDate.getMonthValue(), currentDate.getYear());
         Long previousMonthOrders = getTotalOrdersForMonth(previousMonthDate.getMonthValue(), previousMonthDate.getYear());
 
-        Long currentMonthEarnings = getTotalEarningsForMonth(currentDate.getMonthValue(), currentDate.getYear());
-        Long previousMonthEarnings = getTotalEarningsForMonth(previousMonthDate.getMonthValue(), previousMonthDate.getYear());
+        BigDecimal currentMonthEarnings = getTotalEarningsForMonth(currentDate.getMonthValue(), currentDate.getYear());
+        BigDecimal previousMonthEarnings = getTotalEarningsForMonth(previousMonthDate.getMonthValue(), previousMonthDate.getYear());
 
         Long placed = orderRepository.countByOrderStatus(OrderStatus.PLACED);
         Long shipped = orderRepository.countByOrderStatus(OrderStatus.SHIPPED);
@@ -90,7 +89,7 @@ public class AdminOrderServiceImpl implements AdminOrderService{
     }
 
     @Override
-    public Long getTotalEarningsForMonth(int month, int year) {
+    public BigDecimal getTotalEarningsForMonth(int month, int year) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month - 1);
@@ -111,12 +110,10 @@ public class AdminOrderServiceImpl implements AdminOrderService{
         List<Order> orders = orderRepository.findByDateBetweenAndOrderStatus(startOfMonth, endOfMonth,
                 OrderStatus.DELIVERED);
 
-        Long sum = 0L;
+        BigDecimal sum = BigDecimal.ZERO;
         for (Order order : orders) {
-            sum += order.getTotalAmount();
+            sum = sum.add(order.getTotalAmount());
         }
         return sum;
     }
-
-
 }
